@@ -2,6 +2,62 @@ package dijkstrasAlgorithm;
 import java.util.*;
 
 public class Graph {
+	private ArrayList<Edge> listOfEdges;
+	private HashMap<Integer, Vertex> listOfVertex;
+	private boolean directed = false;
+	
+	public Graph (boolean directed) {
+		this.directed = directed;
+		listOfEdges = new ArrayList<Edge>();
+		listOfVertex = new HashMap<Integer, Vertex>();
+	}
+	
+	/*
+	 * 1. Add vertices for both directed and undirected graphs to the listOFVertex
+	 * 2. Add edge
+	 * 3. Add adjacent for vertex1 and vertex2
+	 */
+	
+	public void addEdge(int ID1, int ID2, int weight) {
+		
+		Vertex vertex1 = null;
+		
+		if (listOfVertex.containsKey(ID1)) {
+			vertex1 = listOfVertex.get(ID1);
+		}
+		
+		else {
+			vertex1 = new Vertex(ID1);
+			listOfVertex.put(ID1, vertex1);
+		}
+		
+		Vertex vertex2 = null;
+		
+		if (listOfVertex.containsKey(ID2)) {
+			vertex2 = listOfVertex.get(ID2);
+		}
+		
+		else {
+			vertex2 = new Vertex(ID2);
+			listOfVertex.put(ID2, vertex2);
+		}
+		
+		Edge edge = new Edge (vertex1, vertex2, weight, directed);
+		listOfEdges.add(edge);
+		vertex1.addAdjacentVertex(edge, vertex2);
+		if (!directed) {
+			vertex2.addAdjacentVertex(edge, vertex1);
+		}
+		
+	}
+	
+	public ArrayList<Edge> getListOfEdges() {
+		return listOfEdges;
+	}
+	
+	public HashMap<Integer, Vertex> getListOfVertex() {
+		return listOfVertex;
+	}
 	
 }
 
@@ -58,13 +114,13 @@ class Vertex {
 	 * 1. Each vertex has an ID
 	 * 2. Each vertex has some data
 	 * 3. Each vertex has edges
-	 * 4. Each vertex has neighbouring vertices
+	 * 4. Each vertex has adjacent vertices
 	 */
 	
 	int ID;
 	private String data;
 	private ArrayList<Edge> listOfEdges = new ArrayList<Edge>();
-	private ArrayList<Vertex> listOfVertices = new ArrayList<Vertex>();
+	private ArrayList<Vertex> listOfAdjacentVertices = new ArrayList<Vertex>();
 	
 	
 	//create Vertex with an ID
@@ -89,7 +145,15 @@ class Vertex {
 	}
 	
 	public ArrayList<Vertex> listOfVertices() {
-		return listOfVertices;
+		return listOfAdjacentVertices;
 	}
+	
+	//add a vertex 
+	public void addAdjacentVertex(Edge edge, Vertex vertex) {
+		listOfEdges.add(edge);
+		listOfAdjacentVertices.add(vertex);
+		
+	}
+	
 	
 }
